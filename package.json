@@ -4,14 +4,16 @@
   "description": "",
   "main": "exoNPM.js",
   "dependencies": {
+    "express": "^4.17.1",
     "parse-json": "^5.2.0"
   },
   "devDependencies": {
+    "morgan": "^1.10.0",
     "ms": "^2.1.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node exoNPM.js"
+    "start": "nodemon firstAPI.js"
   },
   "repository": {
     "type": "git",

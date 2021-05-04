@@ -26,4 +26,8 @@
 //desinstallation d'un module
 //npm unistall name  ou npm un name
 
+//npm install -g -> insallation au niveau OS et pas specifique au dossier 
+
+//gestion avec GIT
+
 console.log('hello')
