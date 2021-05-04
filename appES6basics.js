@@ -33,5 +33,5 @@ setTimeout (()=> {
 
 )
 
-// marche même sans crochet
+// marche même sans crochet si une seule instruction
 setTimeout (() => console.log('test 5') )

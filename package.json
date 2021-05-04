@@ -1,0 +1,26 @@
+{
+  "name": "jstraining",
+  "version": "1.0.0",
+  "description": "",
+  "main": "exoNPM.js",
+  "dependencies": {
+    "parse-json": "^5.2.0"
+  },
+  "devDependencies": {
+    "ms": "^2.1.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node exoNPM.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlmiDev/jsTraining.git"
+  },
+  "author": "Mickael",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlmiDev/jsTraining/issues"
+  },
+  "homepage": "https://github.com/AlmiDev/jsTraining#readme"
+}
