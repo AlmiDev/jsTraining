@@ -72,7 +72,7 @@ app.get ('/api/v1/members', (req,res) => {
 
 //il faut le package body parser pour pouvoir parser le body => doc express
 
-app.put ('/api/v1/members/:id', (req, res) => {
+app.put ('/api/v1/members/:id', (req, res) => {  //modification d'un élément
     
     console.log('toté')
     let index = getIndex(req.params.id)
@@ -103,6 +103,20 @@ app.put ('/api/v1/members/:id', (req, res) => {
     }
 
 })
+
+app.delete('/api/v1/members/:id' , (req, res) => { //modif d'un élément
+    let index = getIndex(req.params.id)
+    
+    if (typeof(index) == 'string') {
+        res.json(error(index))
+    } else {
+
+        members.splice(index,1)
+        res.json(success(members))
+    }
+
+})  
+
 
 
 app.post('/api/v1/members', (req, res) => {
@@ -142,6 +156,8 @@ app.post('/api/v1/members', (req, res) => {
    // res.send(req.body)
 })
 
+
+app.delete('/api/v1/members/:id')
 
 
 
