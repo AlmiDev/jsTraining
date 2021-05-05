@@ -2,7 +2,7 @@
 const express = require('express')
 const morgan = require('morgan')
 //const bodyParser = require('body-parser')
-const {success, error} = require('functionsAPI')
+const funcAPI = require('functionsAPI')
 
 const app = express()
 
@@ -30,7 +30,14 @@ const members = [
     },
 ]
 
+//console.log (members[0])
 
+//retour de l'entrée complète
+/*
+app.get ('/api/v1/members/:id', (req,res) => {
+    res.send(members[req.params.id-1])
+})
+*/
 
 app.use(morgan('dev'))
 //middleware peit module lu au moment de la requête et qui s'execute à ce moment et avant de passer à la suite.
@@ -42,20 +49,9 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 //retour d'un champ en particulier
 app.get ('/api/v1/members/:id', (req,res) => {
-    
-    let index = getIndex(req.params.id)
-    
-    if (typeof(index) == 'string') {
-        res.json(error(index))
-    }else {
-      //res.send(members[getIndex(req.params.id)].name)
-       //pour passer en en tête un bon formattage on indique qu'il s'agit de JSON
-       //res.json(success(members[index].name))
-       res.json(success(members[index]))
-
-    }
-    
- 
+    res.send(members[req.params.id-1].name)
+    //pour passer en en tête un bon formattage on indique qu'il s'agit de JSON
+    res.json(funcAPI.success(members[req.params.id-1].name))
 })
 
 //récupération de tous les membres
@@ -64,46 +60,13 @@ app.get ('/api/v1/members', (req,res) => {
         //res.send(members.slice(0, req.query.max))
         res.json(success(members.slice(0, req.query.max)))
     } else if (req.query.max != undefined) {
-        res.json(error('Wrong max value'))
+        res.json(funcAPI.error('Wrong max value'))
     } else
     //res.send(members)
-    res.json(success(members))
+    res.json(funcAPI.success(members))
 })
 
 //il faut le package body parser pour pouvoir parser le body => doc express
-
-app.put ('/api/v1/members/:id', (req, res) => {
-    
-    console.log('toté')
-    let index = getIndex(req.params.id)
-    
-    if (typeof(index) == 'string') {
-        res.json(error(index))
-    }else {
-        let sameName = false
-        
-        for (let i=0; i < members.length; i++) {
-            if (members[i].name == req.body.name && members[i].id != req.params.id) {
-                console.log('find')
-                sameName = true
-                break
-            }
-        }
-        
-        if (sameName) {
-            res.json(error('name already exists'))
-        } else {
-            
-            members[index].name = req.body.name
-            res.json(success(true))
-
-
-        }
-
-    }
-
-})
-
 
 app.post('/api/v1/members', (req, res) => {
     if (req.body.name) {
@@ -119,7 +82,7 @@ app.post('/api/v1/members', (req, res) => {
         }
         
         if (sameName) {
-            res.json(error('name already exists'))
+            res.json(funcAPI.error('name already exists'))
            
 
         } else {
@@ -129,13 +92,13 @@ app.post('/api/v1/members', (req, res) => {
             }
             members.push(newMember)
         
-            res.json(success(newMember))
+            res.json(funcAPI.success(newMember))
             
         }   
         
 
     } else {
-        res.json(error('no name value'))
+        res.json(funcAPI.error('no name value'))
         
     }
     
@@ -143,18 +106,46 @@ app.post('/api/v1/members', (req, res) => {
 })
 
 
+/*
+app.use ((req, res, next) => {
+    console.log('URL :' + req.url)
+    next ()
+})
+*/
+/*
+ 1er exercice
+app.get ('/api', (req,res) => {
+    res.send('Root API')
+})
 
+
+app.get ('/api/V1', (req,res) => {
+    res.send('API Version 1 - Welcome')
+})
+
+
+app.get ('/api/V1/books/:id/:param2', (req,res) => {
+    res.send(req.params)
+})
+
+*/
 
 
 
 app.listen (8080, () => console.log ('Started on port 8080.'))
-
-
-function getIndex(id) {
-    for (let i= 0; i < members.length; i++) {
-        if (members[i].id == id) 
-            return i
-        
-    } 
-    return 'wrong id'
+/*
+function success(result) {
+    return {
+        status : 'success',
+        result : result
+    }
 }
+
+function error(message) {
+    return {
+        status : 'error',
+        message : message
+    }
+}
+
+*/
