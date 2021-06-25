@@ -4,6 +4,12 @@ const morgan = require('morgan')
 //const bodyParser = require('body-parser')
 const funcAPI = require('functionsAPI')
 
+/*
+app.use((req, res, next) => {
+    console.log('URL :' + req.url)
+    next() // ce qui fait passer à la suite, le middleware exécuté
+}) 
+*/
 const app = express()
 
 

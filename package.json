@@ -4,8 +4,14 @@
   "description": "",
   "main": "exoNPM.js",
   "dependencies": {
+    "airtable": "^0.11.1",
     "express": "^4.17.1",
-    "parse-json": "^5.2.0"
+    "express-oas-generator": "^1.0.39",
+    "mysql": "^2.18.1",
+    "parse-json": "^5.2.0",
+    "promise-mysql": "^5.0.3",
+    "swagger-ui-express": "^4.1.6",
+    "twilio": "^3.64.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
@@ -13,7 +19,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon firstAPI.js"
+    "start": "nodemon api2WithRouter.js"
   },
   "repository": {
     "type": "git",

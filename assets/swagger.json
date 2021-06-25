@@ -1,0 +1,82 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "jstraining",
+      "version": "1.0.0",
+      "license": {
+        "name": "ISC"
+      },
+      "description": "--Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3)."
+    },
+    "basePath" : "/api/V1",
+    "host":"localhost:8080",
+    "tags" : [
+        {
+            "name": "members",
+            "description": "Méthodes pour gérer les utilisateurs "
+        }
+    ],
+    "paths" : {
+      "/members/{id}": {
+        "get": {
+          "tags":["members"],
+          "summary": "/members/{id}",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {},
+          "tags": []
+        },
+        "put": {
+          "summary": "/members/{id}",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {},
+          "tags": []
+        },
+        "delete": {
+          "summary": "/members/{id}",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {},
+          "tags": []
+        }
+      },
+      "/members": {
+        "get": {
+          "summary": "/members",
+          "responses": {},
+          "tags": []
+        },
+        "post": {
+          "summary": "/members",
+          "responses": {},
+          "tags": []
+        }
+      }
+    },
+    "tags": []
+}

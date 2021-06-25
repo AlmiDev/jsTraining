@@ -4,7 +4,7 @@
 
 
 // pour n,e pas mettre d echemin on met tous les fichiers de module dans un fichier node_modules et c'est OK, et sans préciser le .js à la fin du coup
-const mod1 = require ('module1')
+const mod1 = require ('./module1')
 
 mod1.sayHello()
 mod1.sayHi()

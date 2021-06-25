@@ -1,13 +1,10 @@
-//usage du framework express qui permet d emieux gérer les url
-//V2 finalisation de l'APi sans prise en compte du routeur
-
 const express = require('express')
 const morgan = require('morgan')
-//const bodyParser = require('body-parser')
-const {success, error} = require('functionsAPI')
-
+const config = require('./config.json')
+//const funcValid = require('functionsAPI')
+const {success, error} = require('functionsAPI') // cré un objet avec les 2 cvariables ce qui permet d'alléger le code en enlevant le nom de fonction à la base (funcValid)
 const app = express()
-const config = require ('./config.json')
+
 
 const members = [
     {
@@ -32,49 +29,39 @@ const members = [
     },
 ]
 
-//definition du router pour éviter de répéter continuellement l'url /api/v1/Members etc..
-let MembersRouter = express.Router ()
+let MemberRouter = express.Router()
 
 app.use(morgan('dev'))
-//middleware peit module lu au moment de la requête et qui s'execute à ce moment et avant de passer à la suite.
-
-// cf doc express pour recuperation données en vue du parsing, paer rappoirt à la doc express remplace désormais body-parser
+//pour récupération des données de post
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-MembersRouter.route('/:id')
-//chaque élément en dessous hérite du coup de cette url au lieu de la passer en paramètre
+MemberRouter.route('/:id')
 
-    //retour d'un champ en particulier
     .get ((req,res) => {
-        
-        let index = getIndex(req.params.id)
-        
+        //res.send(members[req.params.id-1].name)
+        // -> passage au format json res.send-> res.json
+        //res.json(members[req.params.id-1].name)
+        //gestion du success en cas de réussite pour renvoyer un statut
+        //res.json(funcValid.success(members[req.params.id-1].name))
+        //res.json(success(members[req.params.id-1].name)) // ne fonctionne que tant que l'on a un truc à la base, en cas de modif, ajout ou suppression ce n'es tplsu bon, on va donc chercher la valeur de l'index via getIndex
+
+        let index= getIndex(req.params.id)
         if (typeof(index) == 'string') {
             res.json(error(index))
-        }else {
-        //res.send(members[getIndex(req.params.id)].name)
-        //pour passer en en tête un bon formattage on indique qu'il s'agit de JSON
-        //res.json(success(members[index].name))
-        res.json(success(members[index]))
-
+        } else {
+            res.json(success(members[index]))
         }
-        
-    
     })
-
-    //il faut le package body parser pour pouvoir parser le body => doc express
 
     .put ((req, res) => {  //modification d'un élément
         
-        console.log('toté')
         let index = getIndex(req.params.id)
         
         if (typeof(index) == 'string') {
             res.json(error(index))
         }else {
-            let sameName = false
-            
+            let sameName = false       
             for (let i=0; i < members.length; i++) {
                 if (members[i].name == req.body.name && members[i].id != req.params.id) {
                     console.log('find')
@@ -82,19 +69,14 @@ MembersRouter.route('/:id')
                     break
                 }
             }
-            
             if (sameName) {
                 res.json(error('name already exists'))
             } else {
                 
                 members[index].name = req.body.name
                 res.json(success(true))
-
-
             }
-
         }
-
     })
 
     .delete((req, res) => { //modif d'un élément
@@ -108,27 +90,22 @@ MembersRouter.route('/:id')
             res.json(success(members))
         }
 
-    })
-    
-    
+    })  
 
-//Même principe sur l'url de base
-MembersRouter.route('/')    
-//récupération de tous les membres
+MemberRouter.route('/')
+    
     .get ((req,res) => {
-        if (req.query.max != undefined && req.query.max > 0 ) {
-            //res.send(members.slice(0, req.query.max))
-            res.json(success(members.slice(0, req.query.max)))
-        } else if (req.query.max != undefined) {
-            res.json(error('Wrong max value'))
-        } else
-        //res.send(members)
-        res.json(success(members))
+        if (req.query.max != undefined && req.query.max > 0) {
+            res.json(success(members.slice(0,req.query.max)))
+        } else if  (req.query.max != undefined) { //valeur qui est donc négative ce qui n'est pas bon
+                res.json(error('Valeur de Max incorrecte'))
+        } else {
+            res.json(success(members))
+        }
     })
 
-    .post((req, res) => {
+    .post ((req,res) => {
         if (req.body.name) {
-            
             let sameName = false
 
             for (let i=0; i < members.length; i++) {
@@ -145,7 +122,6 @@ MembersRouter.route('/')
 
             } else {
                 let newMember = {
-                    //id : members.length+1,
                     id : createID(),
                     name : req.body.name
                 }
@@ -154,25 +130,15 @@ MembersRouter.route('/')
                 res.json(success(newMember))
                 
             }   
-            
 
         } else {
-            res.json(error('no name value'))
-            
+            res.json(error('No name value'))
         }
-        
-    // res.send(req.body)
-    })
 
+    }) 
 
-//.delete('/api/v1/members/:id')
-
-//app.use('/api/v1/members', MembersRouter)
-app.use(config.routeAPI+'members', MembersRouter)
-
-//app.listen (8080, () => console.log ('Started on port 8080.'))
-app.listen (config.port, () => console.log ('Started on port '+config.port))
-
+app.use(config.routeAPI+'members', MemberRouter) // laise la main à Membersrouter sur ce qui contient '/api/v1/members'
+app.listen (config.port, () => console.log ('Started new on port 8080.'))
 
 function getIndex(id) {
     for (let i= 0; i < members.length; i++) {
@@ -183,7 +149,36 @@ function getIndex(id) {
     return 'wrong id'
 }
 
+
+
 function createID() {
-    return members[members.length-1].id + 1
-   
+    return members[members.length-1].id + 1 
 }
+
+/* avant de passer en module
+function success(result) {
+    return {
+        status : 'success',
+        result : result
+    }
+}
+
+function error(message) {
+    return {
+        status : 'error',
+        message : message
+    }
+}
+*/
+
+/*
+slice permet de couper un tableau
+
+req.query.x va chercher le paramètre x passer en url
+--
+convention de réponse : se donner un format type pour tout ce que l'on fait 
+exemple tout passer en format json -> res.json envoi une réponse en json (au lieu de res.send)
+
+autre convention - établier une fonction de succés -> functon success 
+logique un peu de callback, la fonction renvoie le résultat attendu en cas de réussite., en cas de réussite, renvoie donc result, en l'occurence ici le tableau members qu'on lui aura passé en paramètre
+*/
