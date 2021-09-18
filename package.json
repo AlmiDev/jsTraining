@@ -6,12 +6,12 @@
   "dependencies": {
     "airtable": "^0.11.1",
     "express": "^4.17.1",
-    "express-oas-generator": "^1.0.39",
+    "express-oas-generator": "^1.0.41",
     "mysql": "^2.18.1",
     "parse-json": "^5.2.0",
-    "promise-mysql": "^5.0.3",
+    "promise-mysql": "^5.0.4",
     "swagger-ui-express": "^4.1.6",
-    "twilio": "^3.64.0"
+    "twilio": "^3.67.2"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

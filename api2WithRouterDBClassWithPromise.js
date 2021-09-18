@@ -55,8 +55,8 @@ mysql.createConnection({
                 .get (async (req,res) => {
                     console.log('call class with max'+req.body.max)
 
-                    let allMembers = await Members.getAll(req.body.max)
-                    //let allMembers = await Members.getAll(req.params.max) //passage en url
+                    //let allMembers = await Members.getAll(req.body.max)
+                    let allMembers = await Members.getAll(req.params.max) //passage en url
                     //res.json(success(allMembers))
                     res.json(checkAndChange(allMembers))
                 })
